@@ -76,9 +76,7 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 ElevatedButton(
-                  child: const Text("LOGIN!"),
-                  onPressed: () => {},
-                ),
+                    child: const Text("LOGIN!"), onPressed: () => {}),
               ],
             ),
           ],
