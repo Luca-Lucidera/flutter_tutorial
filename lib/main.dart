@@ -196,10 +196,18 @@ class UserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      color: Colors.green.shade300,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [navBar(context)],
+      ),
+    );
   }
 }
 
+//funzioni da utilizzare nelle pagine
 Future<http.Response> checkCredential() async {
   String host = "http://192.168.1.95:8080/login";
   var client = http.Client();
@@ -213,6 +221,67 @@ Future<http.Response> checkCredential() async {
       'email': emailController.text,
       'password': passowrdController.text
     }),
+  );
+}
+
+Widget navBar(context) {
+  return Row(
+    //Home button / icons
+    children: [
+      Container(
+        padding: const EdgeInsets.only(top: 45),
+        child: ElevatedButton(
+          onPressed: () {},
+          child: const Icon(
+            Icons.home,
+            color: Colors.black,
+            size: 45.0,
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.transparent,
+            onPrimary: Colors.transparent,
+            shadowColor: Colors.transparent,
+          ),
+        ),
+      ),
+      //Mappa
+      Container(
+        padding: const EdgeInsets.only(top: 45),
+        child: ElevatedButton(
+          onPressed: () {},
+          child: const Icon(
+            Icons.map,
+            size: 45.0,
+            color: Colors.black,
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.transparent,
+            onPrimary: Colors.transparent,
+            shadowColor: Colors.transparent,
+          ),
+        ),
+      ),
+      //User
+      Container(
+        padding: const EdgeInsets.only(top: 45),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const LoginPage()));
+          },
+          child: const Icon(
+            Icons.person,
+            size: 45.0,
+            color: Colors.black,
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.transparent,
+            onPrimary: Colors.transparent,
+            shadowColor: Colors.transparent,
+          ),
+        ),
+      ),
+    ],
   );
 }
 
