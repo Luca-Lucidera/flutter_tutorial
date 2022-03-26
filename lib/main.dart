@@ -1,12 +1,14 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-TextEditingController usernameController = TextEditingController();
+TextEditingController emailController = TextEditingController();
 TextEditingController passowrdController = TextEditingController();
-TextField usernameTextField = TextField(controller: usernameController);
+TextField emailTextField = TextField(controller: emailController);
 TextField passwordTextField = TextField(
   obscureText: true,
   autocorrect: false,
@@ -24,7 +26,83 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Material app",
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const LoginPage(),
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          //Home button / icons
+          Container(
+            padding: const EdgeInsets.only(top: 45),
+            child: ElevatedButton(
+              onPressed: () {},
+              child: const Icon(
+                Icons.home,
+                color: Colors.black,
+                size: 45.0,
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent,
+                onPrimary: Colors.transparent,
+                shadowColor: Colors.transparent,
+              ),
+            ),
+          ),
+          //Mappa
+          Container(
+            padding: const EdgeInsets.only(top: 45),
+            child: ElevatedButton(
+              onPressed: () {},
+              child: const Icon(
+                Icons.map,
+                size: 45.0,
+                color: Colors.black,
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent,
+                onPrimary: Colors.transparent,
+                shadowColor: Colors.transparent,
+              ),
+            ),
+          ),
+          //User
+          Container(
+            padding: const EdgeInsets.only(top: 45),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
+              },
+              child: const Icon(
+                Icons.person,
+                size: 45.0,
+                color: Colors.black,
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent,
+                onPrimary: Colors.transparent,
+                shadowColor: Colors.transparent,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -57,11 +135,11 @@ class LoginPage extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Container(
-                    child: const Text("USERNAME"),
-                    margin: const EdgeInsets.only(right: 20),
+                    child: const Text("EMAIL"),
+                    margin: const EdgeInsets.only(right: 51),
                   ),
                   Flexible(
-                    child: usernameTextField,
+                    child: emailTextField,
                   ),
                 ],
               ),
@@ -98,7 +176,7 @@ class LoginPage extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const SecondRoute()))
+                                          const UserProfile()))
                             }
                         });
                   },
@@ -113,44 +191,29 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class SecondRoute extends StatelessWidget {
-  const SecondRoute({Key? key}) : super(key: key);
+class UserProfile extends StatelessWidget {
+  const UserProfile({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Second Route'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigate back to first route when tapped.
-          },
-          child: const Text('Go back!'),
-        ),
-      ),
-    );
+    return Container();
   }
 }
 
 Future<http.Response> checkCredential() async {
   String host = "http://192.168.1.95:8080/login";
-  var client = await http.Client();
-  bool ok = false;
+  var client = http.Client();
+  log(emailController.text + " " + passowrdController.text);
   return client.post(
     Uri.parse(host),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, String>{
-      'email': 'mornatta@gmail.com',
-      'password': 'mornatta1234'
+      'email': emailController.text,
+      'password': passowrdController.text
     }),
   );
-}
-
-void secondFunction(prova) {
-  debugPrint('$prova');
 }
 
 void lezioniFinoAlla12() {
