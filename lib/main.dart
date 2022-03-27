@@ -43,65 +43,37 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          //Home button / icons
-          Container(
-            padding: const EdgeInsets.only(top: 45),
-            child: ElevatedButton(
-              onPressed: () {},
-              child: const Icon(
-                Icons.home,
-                color: Colors.black,
-                size: 45.0,
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.transparent,
-                onPrimary: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
-            ),
-          ),
-          //Mappa
-          Container(
-            padding: const EdgeInsets.only(top: 45),
-            child: ElevatedButton(
-              onPressed: () {},
-              child: const Icon(
-                Icons.map,
-                size: 45.0,
-                color: Colors.black,
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.transparent,
-                onPrimary: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
-            ),
-          ),
-          //User
-          Container(
-            padding: const EdgeInsets.only(top: 45),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
-              },
-              child: const Icon(
-                Icons.person,
-                size: 45.0,
-                color: Colors.black,
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.transparent,
-                onPrimary: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
-            ),
+          navBar(context),
+          Column(
+            children: [
+              Text("Post 1"),
+              Text("Post 2"),
+            ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class UserProfile extends StatefulWidget {
+  const UserProfile({Key? key}) : super(key: key);
+
+  @override
+  State<UserProfile> createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
+  final imgProfile = takeImg();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [navBar(context), Image.network()],
       ),
     );
   }
@@ -170,6 +142,7 @@ class LoginPage extends StatelessWidget {
                   child: const Text("LOGIN!"),
                   onPressed: () {
                     checkCredential().then((response) => {
+                          log(response.body.toString()),
                           if (response.statusCode == 200)
                             {
                               Navigator.push(
@@ -191,25 +164,9 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class UserProfile extends StatelessWidget {
-  const UserProfile({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.green.shade300,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [navBar(context)],
-      ),
-    );
-  }
-}
-
 //funzioni da utilizzare nelle pagine
 Future<http.Response> checkCredential() async {
-  String host = "http://192.168.1.95:8080/login";
+  String host = "http://192.168.1.201:8080/login";
   var client = http.Client();
   log(emailController.text + " " + passowrdController.text);
   return client.post(
@@ -224,10 +181,11 @@ Future<http.Response> checkCredential() async {
   );
 }
 
-Widget navBar(context) {
+Row navBar(context) {
   return Row(
-    //Home button / icons
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
+      //Home
       Container(
         padding: const EdgeInsets.only(top: 45),
         child: ElevatedButton(
@@ -282,6 +240,20 @@ Widget navBar(context) {
         ),
       ),
     ],
+  );
+}
+
+Future<http.Response> takeImg() async {
+  String host = "http://192.168.1.201:8080/user";
+  var client = http.Client();
+  log(emailController.text + " " + passowrdController.text);
+  return await client.get(
+    Uri.parse(host),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization':
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6ImMzNjEyZGM1LWFkNTQtMTFlYy1hMjhkLWUwZDU1ZWU0NzJhNyIsImlhdCI6MTY0ODM0MTA1OCwiZXhwIjoxNjQ4MzQ4MjU4fQ.bM3LPNF0ZzcRjp0SO_zHZQWLdw_1XgQ8kXhES9xcLGk"
+    },
   );
 }
 
