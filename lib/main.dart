@@ -67,13 +67,15 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  final imgProfile = takeImg();
+  final x = getUser();
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       child: Column(
-        children: [navBar(context), Image.network()],
+        children: [
+          navBar(context),
+        ],
       ),
     );
   }
@@ -243,11 +245,11 @@ Row navBar(context) {
   );
 }
 
-Future<http.Response> takeImg() async {
+void getUser() async {
   String host = "http://192.168.1.201:8080/user";
   var client = http.Client();
   log(emailController.text + " " + passowrdController.text);
-  return await client.get(
+  client.get(
     Uri.parse(host),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
